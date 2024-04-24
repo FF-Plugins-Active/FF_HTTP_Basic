@@ -31,7 +31,6 @@ public class FF_HTTP_Basic : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-                "Projects",		// We need it for LibHv DLL delayed load.
                 "HTTP",
                 "HTTPServer",
             }
