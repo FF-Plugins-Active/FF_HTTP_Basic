@@ -96,7 +96,7 @@ void AHTTP_Server_Basic::HttpServer_Basic_Start()
 
     for (TPair<FString, EHttpRequestTypes>& Pair_Routes : this->Routes)
     {
-        FHttpRouteHandle Each_Route_Handle = this->httpRouter->BindRoute(FHttpPath("/" + Pair_Routes.Key), this->BpRequestToUeRequest(Pair_Routes.Value), [this, Callback_Parse_Request](const FHttpServerRequest& Request, const FHttpResultCallback& Response)
+        FHttpRequestHandler RequestHandler = FHttpRequestHandler::CreateLambda([this, Callback_Parse_Request](const FHttpServerRequest& Request, const FHttpResultCallback& Response)
             {
                 UHttpServerBasicResponse* ResponseObject = NewObject<UHttpServerBasicResponse>();
                 ResponseObject->Response_Callback = Response;
@@ -105,6 +105,8 @@ void AHTTP_Server_Basic::HttpServer_Basic_Start()
                 return true;
             }
         );
+
+        FHttpRouteHandle Each_Route_Handle = this->httpRouter->BindRoute(FHttpPath("/" + Pair_Routes.Key), this->BpRequestToUeRequest(Pair_Routes.Value), RequestHandler);
 
         this->Array_Route_Handles.Add(Each_Route_Handle);
     }
